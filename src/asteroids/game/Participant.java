@@ -330,10 +330,17 @@ public abstract class Participant
     {
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        if (border == null)
-        {
-            border = getOutline();
+        if (border == null) border = getOutline();
+        
+        //if this participant is inert, draw it with a dashed line
+        if (isInert()) {
+            Stroke defaultStroke = g.getStroke();
+            float[] dashingPattern = {2f, 4f};
+            g.setStroke(new BasicStroke(2f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1.0f, dashingPattern, 2.0f));
+            g.draw(border);
+            g.setStroke(defaultStroke);
+        } else {
+            g.draw(border);
         }
-        g.draw(border);
     }
 }

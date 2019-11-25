@@ -15,6 +15,12 @@ public class Ship extends Participant implements AsteroidDestroyer
 {
     /** The outline of the ship */
     private Shape outline;
+    
+    /** outline of thrust */
+    private Shape thrust;
+    
+    /** boolean for if thrust should be displayed */
+    private boolean accelerating;
 
     /** Game controller */
     private Controller controller;
@@ -22,8 +28,7 @@ public class Ship extends Participant implements AsteroidDestroyer
     /**
      * Constructs a ship at the specified coordinates that is pointed in the given direction.
      */
-    public Ship (int x, int y, double direction, Controller controller)
-    {
+    public Ship(int x, int y, double direction, Controller controller) {
         this.controller = controller;
         setPosition(x, y);
         setRotation(direction);
@@ -36,9 +41,18 @@ public class Ship extends Participant implements AsteroidDestroyer
         poly.lineTo(-21, -12);
         poly.closePath();
         outline = poly;
+        
+        Path2D.Double thrustPoly = new Path2D.Double();
+        thrustPoly.moveTo(-14, 8);
+        thrustPoly.lineTo(-25, 0);
+        thrustPoly.lineTo(-14, -8);
+        thrustPoly.append(poly, false);
+        thrust = thrustPoly;
 
-        // Schedule an acceleration in two seconds
-        new ParticipantCountdownTimer(this, "move", 2000);
+        // Schedule vulnerability in two seconds
+        setInert(true);
+        new ParticipantCountdownTimer(this, "vulnerable", 2000);
+        accelerating = false;
     }
 
     /**
@@ -62,8 +76,10 @@ public class Ship extends Participant implements AsteroidDestroyer
     }
 
     @Override
-    protected Shape getOutline ()
-    {
+    protected Shape getOutline() {
+        if (accelerating) {
+            return thrust;
+        }
         return outline;
     }
 
@@ -96,10 +112,12 @@ public class Ship extends Participant implements AsteroidDestroyer
     /**
      * Accelerates by SHIP_ACCELERATION
      */
-    public void accelerate ()
-    {
+    public void accelerate () {
+        accelerating = true;
         accelerate(SHIP_ACCELERATION);
     }
+    
+    public void unaccelerate() { accelerating = false; }
 
     /**
      * When a Ship collides with a ShipDestroyer, it expires
@@ -107,8 +125,7 @@ public class Ship extends Participant implements AsteroidDestroyer
     @Override
     public void collidedWith (Participant p)
     {
-        if (p instanceof ShipDestroyer)
-        {
+        if (p instanceof ShipDestroyer) {
             // Expire the ship from the game
             Participant.expire(this);
 
@@ -121,14 +138,7 @@ public class Ship extends Participant implements AsteroidDestroyer
      * This method is invoked when a ParticipantCountdownTimer completes its countdown.
      */
     @Override
-    public void countdownComplete (Object payload)
-    {
-        /*// Give a burst of acceleration, then schedule another
-        // burst for 200 msecs from now.
-        if (payload.equals("move"))
-        {
-            accelerate();
-            new ParticipantCountdownTimer(this, "move", 200);
-        }*/
+    public void countdownComplete (Object payload) {
+        if (payload.equals("vulnerable")) setInert(false);
     }
 }

@@ -11,7 +11,7 @@ import asteroids.game.Participant;
 /**
  * Represents asteroids
  */
-public class Asteroid extends Participant implements ShipDestroyer
+public class Bullet extends Participant implements ShipDestroyer, AsteroidDestroyer
 {
     /** The size of the asteroid (0 = small, 1 = medium, 2 = large) */
     private int size;
@@ -29,7 +29,7 @@ public class Asteroid extends Participant implements ShipDestroyer
      * positions it at the provided coordinates with a random rotation. Its velocity has the given speed but is in a
      * random direction.
      */
-    public Asteroid (int size, int displaySize, Controller controller)
+    public Bullet (int size, double x, double y, Controller controller)
     {
         // Make sure size and variety are valid
         if (size < 0 || size > 2)
@@ -40,7 +40,7 @@ public class Asteroid extends Participant implements ShipDestroyer
         // Create the asteroid
         this.controller = controller;
         this.size = size;
-        setPosition(RANDOM.nextDouble() * SIZE, RANDOM.nextDouble() * SIZE);
+        setPosition(x, y);
         setVelocity(3 - size, RANDOM.nextDouble() * 2 * Math.PI);
         setRotation(2 * Math.PI * RANDOM.nextDouble());
         createAsteroidOutline(RANDOM.nextInt(4), size);

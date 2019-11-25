@@ -118,9 +118,10 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
      */
     private void placeAsteroids ()
     {
-        addParticipant(new Asteroid(0, 20, 100, this));
-        addParticipant(new Asteroid(1, 100, 20, this));
-        addParticipant(new Asteroid(2, 200, 200, this));
+        addParticipant(new Asteroid(2, SIZE, this));
+        addParticipant(new Asteroid(2, SIZE, this));
+        addParticipant(new Asteroid(2, SIZE, this));
+        addParticipant(new Asteroid(2, SIZE, this));
     }
 
     /**
@@ -296,5 +297,10 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
     public void keyTyped (KeyEvent e) {}
     
     @Override
-    public void keyReleased (KeyEvent e) { keyList.remove(e.getKeyCode()); }
+    public void keyReleased (KeyEvent e) {
+        keyList.remove(e.getKeyCode());
+        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
+            ship.unaccelerate();
+        }
+    }
 }
