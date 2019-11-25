@@ -24,12 +24,17 @@ public class Ship extends Participant implements AsteroidDestroyer
 
     /** Game controller */
     private Controller controller;
+    
+    /** The count of bullets currently in existence */
+    private int bullets;
 
     /**
      * Constructs a ship at the specified coordinates that is pointed in the given direction.
      */
     public Ship(int x, int y, double direction, Controller controller) {
         this.controller = controller;
+        accelerating = false;
+        bullets = 0;
         setPosition(x, y);
         setRotation(direction);
 
@@ -52,7 +57,6 @@ public class Ship extends Participant implements AsteroidDestroyer
         // Schedule vulnerability in two seconds
         setInert(true);
         new ParticipantCountdownTimer(this, "vulnerable", 2000);
-        accelerating = false;
     }
 
     /**
@@ -120,8 +124,13 @@ public class Ship extends Participant implements AsteroidDestroyer
     public void unaccelerate() { accelerating = false; }
     
     public void createBullet() {
-        controller.addParticipant(new Bullet(getXNose(), getYNose(), getRotation(), getSpeedX(), getSpeedY()));
+        if (bullets <= 8) {
+            controller.addParticipant(new Bullet(getXNose(), getYNose(), getRotation(), getSpeedX(), getSpeedY(), this));
+            bullets++;
+        }
     }
+    
+    public void removeBullet() { bullets--; }
 
     /**
      * When a Ship collides with a ShipDestroyer, it expires

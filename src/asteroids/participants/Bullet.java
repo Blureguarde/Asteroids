@@ -12,6 +12,8 @@ import asteroids.game.ParticipantCountdownTimer;
 public class Bullet extends Participant implements AsteroidDestroyer {
     /** bullet shape */
     private Shape outline;
+    
+    private Ship ship;
 
     /**
      * Throws an IllegalArgumentException if size or variety is out of range.
@@ -20,7 +22,7 @@ public class Bullet extends Participant implements AsteroidDestroyer {
      * positions it at the provided coordinates with a random rotation. Its velocity has the given speed but is in a
      * random direction.
      */
-    public Bullet(double x, double y, double rotation, double speedX, double speedY) {
+    public Bullet(double x, double y, double rotation, double speedX, double speedY, Ship ship) {
         Path2D.Double poly = new Path2D.Double();
         poly.moveTo(4,0);
         poly.lineTo(-4, -1);
@@ -34,6 +36,7 @@ public class Bullet extends Participant implements AsteroidDestroyer {
         incrementSpeed(speedX, speedY);
         
         new ParticipantCountdownTimer(this, "lifetime", 1500);
+        this.ship = ship;
     }
 
     @Override
@@ -52,6 +55,9 @@ public class Bullet extends Participant implements AsteroidDestroyer {
      */
     @Override
     public void countdownComplete (Object payload) {
-        if (payload.equals("lifetime")) Participant.expire(this);
+        if (payload.equals("lifetime")) {
+            Participant.expire(this);
+            ship.removeBullet();
+        }
     }
 }
