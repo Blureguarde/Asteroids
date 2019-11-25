@@ -301,6 +301,8 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
         keyList.remove(e.getKeyCode());
         if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
             ship.unaccelerate();
+        } else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_SPACE) {
+            ship.createBullet();
         }
     }
 }

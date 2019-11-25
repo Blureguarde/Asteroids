@@ -118,6 +118,10 @@ public class Ship extends Participant implements AsteroidDestroyer
     }
     
     public void unaccelerate() { accelerating = false; }
+    
+    public void createBullet() {
+        controller.addParticipant(new Bullet(getXNose(), getYNose(), getDirection(), getSpeed()));
+    }
 
     /**
      * When a Ship collides with a ShipDestroyer, it expires
