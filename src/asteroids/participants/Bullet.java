@@ -3,7 +3,6 @@ package asteroids.participants;
 import java.awt.Shape;
 import java.awt.geom.*;
 import asteroids.destroyers.AsteroidDestroyer;
-import asteroids.game.Controller;
 import asteroids.game.Participant;
 import asteroids.game.ParticipantCountdownTimer;
 
@@ -11,7 +10,7 @@ import asteroids.game.ParticipantCountdownTimer;
  * Represents asteroids
  */
 public class Bullet extends Participant implements AsteroidDestroyer {
-    /** The game controller */
+    /** bullet shape */
     private Shape outline;
 
     /**
@@ -21,15 +20,18 @@ public class Bullet extends Participant implements AsteroidDestroyer {
      * positions it at the provided coordinates with a random rotation. Its velocity has the given speed but is in a
      * random direction.
      */
-    public Bullet (double x, double y, double direction, double speed) {
+    public Bullet(double x, double y, double rotation, double speedX, double speedY) {
         Path2D.Double poly = new Path2D.Double();
-        poly.moveTo(3,0);
-        poly.moveTo(-3, 0);
+        poly.moveTo(4,0);
+        poly.lineTo(-4, -1);
+        poly.lineTo(-4, 1);
+        poly.closePath();
         outline = poly;
         
         setPosition(x, y);
-        setRotation(direction);
-        setVelocity(speed + 8, direction);
+        setRotation(rotation);
+        setVelocity(8.0, rotation);
+        incrementSpeed(speedX, speedY);
         
         new ParticipantCountdownTimer(this, "lifetime", 1500);
     }

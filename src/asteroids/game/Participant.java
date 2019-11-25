@@ -240,6 +240,19 @@ public abstract class Participant
     {
         return y;
     }
+    
+    public double getSpeedX() {
+        return speedX;
+    }
+    
+    public double getSpeedY() {
+        return speedY;
+    }
+    
+    public void incrementSpeed(double speedX, double speedY) {
+        this.speedX += speedX;
+        this.speedY += speedY;
+    }
 
     /**
      * Returns a Shape object that describes the outline of this Participant. The center of the Shape should be at
