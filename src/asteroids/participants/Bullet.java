@@ -35,7 +35,7 @@ public class Bullet extends Participant implements AsteroidDestroyer {
         setVelocity(8.0, rotation);
         incrementSpeed(speedX, speedY);
         
-        new ParticipantCountdownTimer(this, "lifetime", 1500);
+        new ParticipantCountdownTimer(this, "lifetime", 3000);
         this.ship = ship;
     }
 

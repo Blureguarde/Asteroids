@@ -31,6 +31,9 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
 
     /** Number of lives left */
     private int lives;
+    
+    /** Score counter */
+    private int score;
 
     /** The game display */
     private Display display;
@@ -149,7 +152,7 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
         placeShip();
 
         // Reset statistics
-        lives = 1;
+        lives = 3;
 
         // Start listening to events (but don't listen twice)
         display.removeKeyListener(this);
@@ -232,7 +235,7 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
 
             // Refresh screen
             display.refresh();
-        }
+        } 
     }
     
     /** Create two asteroids of 1 less size */
@@ -256,9 +259,10 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
 
             // If there are no lives left, the game is over. Show the final
             // screen.
-            if (lives <= 0)
-            {
+            if (lives <= 0) {
                 finalScreen();
+            } else {
+                
             }
         }
     }
