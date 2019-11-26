@@ -20,7 +20,7 @@ public class Constants
     /**
      * Game title
      */
-    public final static String TITLE = "CS 1410 Asteroids";
+    public final static String TITLE = "Asteroids";
 
     /**
      * Label on start game button
@@ -138,7 +138,7 @@ public class Constants
     /**
      * Offset of score/level from left/right side.
      */
-    public final static int LABEL_HORIZONTAL_OFFSET = 50;
+    public final static int LABEL_HORIZONTAL_OFFSET = 30;
     
     /**
      * Offset of score/level from top side.

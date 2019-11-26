@@ -2,6 +2,7 @@ package asteroids.game;
 
 import static asteroids.game.Constants.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import javax.swing.*;
@@ -34,7 +35,10 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
     
     /** Score counter */
     private int score;
-
+    
+    /** Level counter */
+    private int level;
+    
     /** The game display */
     private Display display;
     
@@ -69,11 +73,11 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
      * Controller.
      */
     @Override
-    public Iterator<Participant> iterator ()
-    {
+    public Iterator<Participant> iterator() {
         return pstate.iterator();
+        
     }
-
+    
     /**
      * Returns the ship, or null if there isn't one
      */
@@ -92,7 +96,7 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
         display.setLegend("Asteroids");
 
         // Place four asteroids near the corners of the screen.
-        placeAsteroids();
+        placeAsteroids(level);
     }
 
     /**
@@ -119,8 +123,7 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
     /**
      * Places an asteroid near one corner of the screen. Gives it a random velocity and rotation.
      */
-    private void placeAsteroids ()
-    {
+    private void placeAsteroids(int level) {
         addParticipant(new Asteroid(2, SIZE, this));
         addParticipant(new Asteroid(2, SIZE, this));
         addParticipant(new Asteroid(2, SIZE, this));
@@ -135,6 +138,8 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
         pstate.clear();
         display.setLegend("");
         ship = null;
+        level = 0;
+        score = 0;
     }
 
     /**
@@ -145,8 +150,8 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
         // Clear the screen
         clear();
 
-        // Plac asteroids
-        placeAsteroids();
+        // Place asteroids
+        placeAsteroids(level);
 
         // Place the ship
         placeShip();
@@ -191,11 +196,25 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
     /**
      * An asteroid has been destroyed
      */
-    public void asteroidDestroyed ()
-    {
+    public void asteroidDestroyed(int size, double x, double y) {
+        //add to score
+        if (size == 0) {
+            score += 100;
+        } else if (size == 1) {
+            score += 50;
+        } else {
+            score += 20;
+        }
+        
+        //split asteroid
+        if (size > 0) {
+            addParticipant(new Asteroid(size - 1, x, y, this));
+            addParticipant(new Asteroid(size - 1, x, y, this));
+        }
+        
         // If all the asteroids are gone, schedule a transition
-        if (countAsteroids() == 0)
-        {
+        if (countAsteroids() == 0) {
+            display.setLegend("Next Level");
             scheduleTransition(END_DELAY);
         }
     }
@@ -238,13 +257,8 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
         } 
     }
     
-    /** Create two asteroids of 1 less size */
-    public void splitAsteroid(int size, double x, double y) {
-        if (size > 0) {
-            addParticipant(new Asteroid(size - 1, x, y, this));
-            addParticipant(new Asteroid(size - 1, x, y, this));
-        }
-    }
+    /** Return score */
+    public int getScore() { return score; };
 
     /**
      * If the transition time has been reached, transition to a new state
@@ -261,8 +275,11 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
             // screen.
             if (lives <= 0) {
                 finalScreen();
+            } else if (countAsteroids() == 0) {
+                placeAsteroids(++level);
+                if (ship == null) placeShip();
             } else {
-                
+                placeShip();
             }
         }
     }
@@ -311,10 +328,12 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
     @Override
     public void keyReleased (KeyEvent e) {
         keyList.remove(e.getKeyCode());
-        if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
-            ship.unaccelerate();
-        } else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_SPACE) {
-            ship.createBullet();
+        if (ship != null) {
+            if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
+                ship.unaccelerate();
+            } else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_SPACE) {
+                ship.createBullet();
+            }
         }
     }
 }

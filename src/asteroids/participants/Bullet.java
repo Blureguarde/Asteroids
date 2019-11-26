@@ -5,6 +5,7 @@ import java.awt.geom.*;
 import asteroids.destroyers.AsteroidDestroyer;
 import asteroids.game.Participant;
 import asteroids.game.ParticipantCountdownTimer;
+import static asteroids.game.Constants.*;
 
 /**
  * Represents asteroids
@@ -32,10 +33,10 @@ public class Bullet extends Participant implements AsteroidDestroyer {
         
         setPosition(x, y);
         setRotation(rotation);
-        setVelocity(8.0, rotation);
+        setVelocity(BULLET_SPEED, rotation);
         incrementSpeed(speedX, speedY);
         
-        new ParticipantCountdownTimer(this, "lifetime", 3000);
+        new ParticipantCountdownTimer(this, "lifetime", BULLET_DURATION);
         this.ship = ship;
     }
 

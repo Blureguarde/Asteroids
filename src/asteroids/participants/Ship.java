@@ -124,7 +124,7 @@ public class Ship extends Participant implements AsteroidDestroyer
     public void unaccelerate() { accelerating = false; }
     
     public void createBullet() {
-        if (bullets <= 8) {
+        if (bullets <= BULLET_LIMIT) {
             controller.addParticipant(new Bullet(getXNose(), getYNose(), getRotation(), getSpeedX(), getSpeedY(), this));
             bullets++;
         }
