@@ -29,8 +29,7 @@ public class Asteroid extends Participant implements ShipDestroyer
      * positions it at the provided coordinates with a random rotation. Its velocity has the given speed but is in a
      * random direction.
      */
-    public Asteroid (int size, int displaySize, Controller controller)
-    {
+    public Asteroid(int size, double x, double y, Controller controller) {
         // Make sure size and variety are valid
         if (size < 0 || size > 2)
         {
@@ -40,10 +39,14 @@ public class Asteroid extends Participant implements ShipDestroyer
         // Create the asteroid
         this.controller = controller;
         this.size = size;
-        setPosition(RANDOM.nextDouble() * SIZE, RANDOM.nextDouble() * SIZE);
+        setPosition(x, y);
         setVelocity(3 - size, RANDOM.nextDouble() * 2 * Math.PI);
         setRotation(2 * Math.PI * RANDOM.nextDouble());
         createAsteroidOutline(RANDOM.nextInt(4), size);
+    }
+    
+    public Asteroid(int size, int displaySize, Controller controller) {
+        this(size, RANDOM.nextDouble() * displaySize, RANDOM.nextDouble() * displaySize, controller);
     }
 
     @Override
@@ -142,6 +145,7 @@ public class Asteroid extends Participant implements ShipDestroyer
         {
             // Expire the asteroid
             Participant.expire(this);
+            controller.splitAsteroid(size, getX(), getY());
 
             // Inform the controller
             controller.asteroidDestroyed();

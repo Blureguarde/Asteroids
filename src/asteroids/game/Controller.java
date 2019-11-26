@@ -234,6 +234,14 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
             display.refresh();
         }
     }
+    
+    /** Create two asteroids of 1 less size */
+    public void splitAsteroid(int size, double x, double y) {
+        if (size > 0) {
+            addParticipant(new Asteroid(size - 1, x, y, this));
+            addParticipant(new Asteroid(size - 1, x, y, this));
+        }
+    }
 
     /**
      * If the transition time has been reached, transition to a new state
