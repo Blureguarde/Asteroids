@@ -51,8 +51,15 @@ public class Screen extends JPanel {
     }
     
     /** Draw lives UI */
-    public void drawLives() {
+    public void drawLives(Graphics2D g, Controller controller) {
         
+    }
+    
+    /** Draw level UI */
+    public void drawLevel(Graphics2D g, Controller controller) {
+        AttributedString level = new AttributedString(String.format("%d", controller.getLevel()));
+        level.addAttribute(TextAttribute.FONT,  UI_FONT);
+        g.drawString(level.getIterator(), LABEL_HORIZONTAL_OFFSET + 680, LABEL_VERTICAL_OFFSET);
     }
     
     /**
@@ -76,5 +83,7 @@ public class Screen extends JPanel {
         g.drawString(legend, (SIZE - size) / 2, SIZE / 2);
         
         drawScore(g, controller);
+        
+        drawLevel(g, controller);
     }
 }

@@ -138,7 +138,7 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
         pstate.clear();
         display.setLegend("");
         ship = null;
-        level = 0;
+        level = 1;
         score = 0;
     }
 
@@ -158,6 +158,7 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
 
         // Reset statistics
         lives = 3;
+        level = 1;
 
         // Start listening to events (but don't listen twice)
         display.removeKeyListener(this);
@@ -259,6 +260,11 @@ public class Controller implements KeyListener, ActionListener, Iterable<Partici
     
     /** Return score */
     public int getScore() { return score; };
+    
+    /** Return level */
+    public int getLevel() {
+        return level;
+    }
 
     /**
      * If the transition time has been reached, transition to a new state
